@@ -18,8 +18,10 @@ jobs:
 
       - name: Terraform init
         run: terraform init
+        working-directory: dns
 
       - name: Terraform apply
         run: terraform apply -auto-approve
         env:
           GANDI_PERSONAL_ACCESS_TOKEN: ${{ secrets.GANDI_PERSONAL_ACCESS_TOKEN }}
+        working-directory: dns
