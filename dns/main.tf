@@ -52,3 +52,12 @@ resource "gandi_domain" "aredherring_tech" {
     zip             = "D02 RC90"
   }
 }
+
+resource "gandi_livedns_record" "aredherring_tech" {
+  zone = gandi_domain.aredherring_tech.name
+  ttl  = 3600
+  name = "sso.aredherring.tech"
+  type = "A"
+  # TODO: How frequently does this change?
+  values = ["67.187.230.62"]
+}
