@@ -28,4 +28,4 @@ entryPoints:
         certResolver: letsencrypt
 
 log:
-  level: INFO
+  level: DEBUG
