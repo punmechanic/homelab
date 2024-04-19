@@ -54,8 +54,7 @@ resource "gandi_domain" "aredherring_tech" {
 }
 
 locals {
-  # TODO: How frequently does this change?
-  ip_address = "67.187.230.62"
+  ip_address = "192.168.0.215"
 }
 
 resource "gandi_livedns_record" "whoami" {
