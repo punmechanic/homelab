@@ -22,20 +22,6 @@ services:
       - "traefik.http.routers.whoami.service=frontend"
       - "traefik.http.routers.whoami.tls.certresolver=letsencrypt"
 
-  portainer:
-    image: portainer/portainer-ce:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    restart: always
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.aredherring.tech`)"
-      - "traefik.http.routers.portainer.entrypoints=websecure"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-      - "traefik.http.routers.portainer.service=portainer"
-      - "traefik.http.routers.portainer.tls.certresolver=letsencrypt"
-
 secrets:
   gandiv5_personal_access_token:
     file: ./secrets/gandi-v5-token.secret
