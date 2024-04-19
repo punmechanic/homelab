@@ -1,6 +1,9 @@
 services:
   traefik:
     image: traefik:v2.5
+    environment:
+      # TODO: This is obviously bad, we should store this in Vault or something.
+      - GANDIV5_PERSONAL_ACCESS_TOKEN=${GANDIV5_PERSONAL_ACCESS_TOKEN}
     volumes:
       - $PWD/traefik.yaml:/etc/traefik/traefik.yaml
       - /var/run/docker.sock:/var/run/docker.sock
