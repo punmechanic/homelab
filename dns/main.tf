@@ -72,3 +72,11 @@ resource "gandi_livedns_record" "traefik" {
   type   = "A"
   values = [local.ip_address]
 }
+
+resource "gandi_livedns_record" "portainer" {
+  zone   = gandi_domain.aredherring_tech.name
+  ttl    = 3600
+  name   = "portainer"
+  type   = "A"
+  values = [local.ip_address]
+}
