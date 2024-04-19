@@ -53,11 +53,20 @@ resource "gandi_domain" "aredherring_tech" {
   }
 }
 
-resource "gandi_livedns_record" "aredherring_tech" {
-  zone = gandi_domain.aredherring_tech.name
-  ttl  = 3600
-  name = "sso"
-  type = "A"
+locals {
   # TODO: How frequently does this change?
-  values = ["67.187.230.62"]
+  ip_address = "67.187.230.62"
+  domains = [
+    "sso",
+    "traefik"
+  ]
+}
+
+resource "gandi_livedns_record" "aredherring_tech" {
+  for_each = toset(local.domains)
+  zone     = gandi_domain.aredherring_tech.name
+  ttl      = 3600
+  name     = each.value
+  type     = "A"
+  values   = [local.ip_address]
 }
