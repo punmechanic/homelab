@@ -3,7 +3,7 @@
 # Docker configuration backend
 providers:
   docker:
-    defaultRule: "Host(`{{ trimPrefix `/` .Name }}.aredherring.tech`)"
+    defaultRule: "Host(`{{ trimSuffix `-homelab` .Name | trimPrefix `/` }}.aredherring.tech`)"
 
 # API and dashboard configuration
 api:
