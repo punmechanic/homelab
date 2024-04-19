@@ -25,3 +25,8 @@ jobs:
         env:
           GANDI_PERSONAL_ACCESS_TOKEN: ${{ secrets.GANDI_PERSONAL_ACCESS_TOKEN }}
         working-directory: dns
+
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: Updated Terraform state
+          default_author: github_actions
