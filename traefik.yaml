@@ -13,7 +13,7 @@ certificatesResolvers:
   letsencrypt:
     acme:
       email: "dan@aredherring.tech"
-      storage: "/etc/traefik/acme.json"
+      storage: "/letsencrypt/acme.json"
       dnsChallenge:
         provider: "gandiv5"
         delayBeforeCheck: 0
