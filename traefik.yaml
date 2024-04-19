@@ -13,9 +13,9 @@ certificatesResolvers:
   letsencrypt:
     acme:
       email: "dan@aredherring.tech"
-      storage: "/letsencrypt/acme.json"
+      storage: "acme.json"
       # Experimental server with lower rate limits.
-      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      # caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
       dnsChallenge:
         provider: "gandiv5"
         delayBeforeCheck: 0

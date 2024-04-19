@@ -56,17 +56,20 @@ resource "gandi_domain" "aredherring_tech" {
 locals {
   # TODO: How frequently does this change?
   ip_address = "67.187.230.62"
-  domains = [
-    "sso",
-    "traefik"
-  ]
 }
 
-resource "gandi_livedns_record" "aredherring_tech" {
-  for_each = toset(local.domains)
-  zone     = gandi_domain.aredherring_tech.name
-  ttl      = 3600
-  name     = each.value
-  type     = "A"
-  values   = [local.ip_address]
+resource "gandi_livedns_record" "whoami" {
+  zone   = gandi_domain.aredherring_tech.name
+  ttl    = 3600
+  name   = "whoami"
+  type   = "A"
+  values = [local.ip_address]
+}
+
+resource "gandi_livedns_record" "traefik" {
+  zone   = gandi_domain.aredherring_tech.name
+  ttl    = 3600
+  name   = "traefik"
+  type   = "A"
+  values = [local.ip_address]
 }
