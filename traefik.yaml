@@ -17,3 +17,7 @@ certificatesResolvers:
       dnsChallenge:
         provider: "gandiv5"
         delayBeforeCheck: 0
+
+entryPoints:
+  websecure:
+    address: ":443"

@@ -1,13 +1,13 @@
 services:
   traefik:
-    image: traefik:v2.5
+    image: traefik:v2.11
     environment:
       # TODO: This is obviously bad, we should store this in Vault or something.
       - GANDIV5_PERSONAL_ACCESS_TOKEN=${GANDIV5_PERSONAL_ACCESS_TOKEN}
     volumes:
       - $PWD/traefik.yaml:/etc/traefik/traefik.yaml
       - /var/run/docker.sock:/var/run/docker.sock
-      - /letsencrypt
+      - ./letsencrypt:/letsencrypt
     ports:
       - "8080:8080"
       - "80:80"
@@ -15,3 +15,8 @@ services:
 
   whoami:
     image: traefik/whoami
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.aredherring.tech`)"
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "traefik.http.routers.whoami.tls.certresolver=letsencrypt"
