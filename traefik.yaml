@@ -23,6 +23,9 @@ certificatesResolvers:
 entryPoints:
   websecure:
     address: ":443"
+    http:
+      tls:
+        certResolver: letsencrypt
 
 log:
   level: INFO
