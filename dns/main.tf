@@ -55,10 +55,7 @@ resource "gandi_domain" "aredherring_tech" {
 
 locals {
   ip_address = "192.168.0.215"
-  entries = [
-    "whoami",
-    "gitlab"
-  ]
+  entries    = []
 }
 
 resource "gandi_livedns_record" "entries" {
