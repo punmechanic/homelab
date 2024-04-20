@@ -1,14 +1,2 @@
 #!/bin/sh
-docker compose up -d -V $@ --remove-orphans
-# TODO: use docker stack
-# problems: docker stack generates random node names.
-# DNS works, but host resolution might not? The TLS certs are probably generated with the random node names, even with the router will direct users to the right endpoint.
-# My guess is that to solve this we either:
-# * Need better DNS automation (have all the random names be CNAME to the service name) - this is the better approach because it permits replicas
-# * Or need to strip the random node names. This might work.
-#
-# We really really only want ONE TLS cert to be generated.
-#
-# Anyway, Swarm is important because it means we can use multiple devices.
-
-# docker stack deploy homelab --compose-file docker-compose.yaml
+docker stack deploy --detach -c stack.yaml homelab
