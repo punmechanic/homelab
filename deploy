@@ -1,2 +1,2 @@
 #!/bin/sh
-docker stack deploy --detach -c stack.yaml homelab
+docker stack deploy --detach -c stacks/traefik/stack.yaml homelab

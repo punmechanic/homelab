@@ -35,4 +35,4 @@ volumes:
 
 configs:
   traefik:
-    file: ./traefik.yaml
+    file: ./configs/traefik.yaml
