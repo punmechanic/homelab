@@ -1,0 +1,8 @@
+services:
+  gitlab:
+    image: gitlab/gitlab-ce
+    labels:
+      traefik.http.routers.gitlab.rule: Host(`gitlab.aredherring.tech`)
+      traefik.http.routers.gitlab.entrypoints: websecure
+    deploy:
+      replicas: 2

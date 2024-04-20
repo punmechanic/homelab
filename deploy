@@ -1,2 +1,6 @@
 #!/bin/sh
-docker stack deploy --detach -c stacks/traefik/stack.yaml homelab
+docker stack deploy --detach -c stacks/traefik/stack.yaml homelab &
+docker stack deploy --detach -c stacks/gitlab/stack.yaml gitlab &
+./apply-dns-changes --auto-approve &
+
+wait

@@ -1,1 +1,1 @@
-GANDI_PERSONAL_ACCESS_TOKEN=$(cat secrets/gandi-v5-token.secret) terraform -chdir=dns apply
+GANDI_PERSONAL_ACCESS_TOKEN=$(cat secrets/gandi-v5-token.secret) terraform -chdir=dns apply $@
