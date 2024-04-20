@@ -5,17 +5,13 @@ providers:
   docker:
     defaultRule: "Host(`{{ trimSuffix `-homelab` .Name | trimPrefix `/` }}.aredherring.tech`)"
 
-# API and dashboard configuration
-api:
-  insecure: true
-
 certificatesResolvers:
   letsencrypt:
     acme:
       email: "dan@aredherring.tech"
       storage: "acme.json"
       # Experimental server with lower rate limits.
-      # caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
       dnsChallenge:
         provider: "gandiv5"
         delayBeforeCheck: 0
