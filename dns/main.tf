@@ -55,20 +55,16 @@ resource "gandi_domain" "aredherring_tech" {
 
 locals {
   ip_address = "192.168.0.215"
+  entries = [
+    "whoami"
+  ]
 }
 
-resource "gandi_livedns_record" "whoami" {
-  zone   = gandi_domain.aredherring_tech.name
-  ttl    = 3600
-  name   = "whoami"
-  type   = "A"
-  values = [local.ip_address]
-}
-
-resource "gandi_livedns_record" "traefik" {
-  zone   = gandi_domain.aredherring_tech.name
-  ttl    = 3600
-  name   = "traefik"
-  type   = "A"
-  values = [local.ip_address]
+resource "gandi_livedns_record" "entries" {
+  for_each = toset(local.entries)
+  zone     = gandi_domain.aredherring_tech.name
+  ttl      = 3600
+  name     = each.value
+  type     = "A"
+  values   = [local.ip_address]
 }
