@@ -1,0 +1,22 @@
+services:
+  gitlab:
+    image: gitlab/gitlab-ce
+    ports:
+      - "8080:80"
+    networks:
+      - gitlab_ci
+
+  # gitlab-runner:
+  #   image: gitlab/gitlab-runner
+  #   volumes:
+  #     # Must have access to the Docker socket to run additional containers
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     # A single file is mounted because Docker configs are really frustrating to deal with.
+  #     - ./configs/gitlab-runner.toml /etc/gitlab-runner/config.toml
+  #   deploy:
+  #     replicas: 3
+  #   networks:
+  #     - gitlab_ci
+
+networks:
+  gitlab_ci: {}
