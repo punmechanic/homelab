@@ -2,3 +2,4 @@
 .env
 /letsencrypt
 secrets/*.secret
+secrets/
