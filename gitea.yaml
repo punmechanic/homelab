@@ -20,7 +20,7 @@ services:
       - gitea
       - traefik
     volumes:
-      - /data
+      - gitea:/data
     secrets:
       - gitea_password.v1
     deploy:
@@ -75,6 +75,9 @@ secrets:
     file: ./secrets/gitea_postgres_password.txt
   gitea_runner_token.v1:
     file: ./secrets/gitea/ci_runner_token.txt
+
+volumes:
+  gitea: {}
 
 networks:
   gitea: {}
