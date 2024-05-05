@@ -2,6 +2,16 @@
 
 Follow these steps in order to deploy from scratch.
 
+## Traefik configuration
+
+**If you anticipate the deployment will be unstable**, you must modify
+`traefik.yaml` and uncomment the following line:
+
+    # caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+
+If you do not do this, you will almost certainly hit a rate limit on the
+official LetsEncrypt servers and be unable to issue certificates for a week.
+
 ## Network setup
 
 The following network must be created for Traefik to be able to reach all
@@ -17,12 +27,18 @@ Generate new secrets:
     ./generate-secret.sh > secrets/keycloak_admin_password.txt
     ./generate-secret.sh > secrets/keycloak_pg_password.txt
     ./generate-secret.sh > secrets/terraform_postgres_backend_password.txt
+    ./generate-secret.sh > secrets/gitea_postgres_password.txt
+
+Generate a personal access token from https://gandi.net which has permissions to
+manage DNS records, and store it in `secrets/gandi_api_key.txt.`
 
 ## Deployment
 
     ./build-images.sh && ./deploy-stacks.sh
 
-## Keycloak
+## Services
+
+### Traefik
 
 - Visit `http://localhost:8080` and log into Keycloak using the credentials
   `admin` and the password in `secrets/keycloak_admin_password.txt`
@@ -34,6 +50,8 @@ Generate new secrets:
 - Copy the client secret from the Credentials panel. Create a new `.env` file at
   `terraform/.env` with the following values, replacing the client secret as
   appropriate:
+
+### DNS, Keycloak and other Terraform
 
 ```
 export PGUSER=terraform
