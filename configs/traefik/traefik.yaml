@@ -19,6 +19,8 @@ certificatesResolvers:
     acme:
       storage: /etc/traefik/acme/acme.json
       email: dan@aredherring.tech
-      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      # Enable this if the server starts flapping to prevent us being rate-limited from getting certs.
+      # Certs are stored in a Docker volume so this isn't really going to be a problem anyway.
+      # caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
       dnsChallenge:
         provider: gandiv5

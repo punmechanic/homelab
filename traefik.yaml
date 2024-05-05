@@ -14,7 +14,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - acme_certificates:/etc/traefik/acme
     configs:
-      - source: traefik.v11
+      - source: traefik.v12
         target: /etc/traefik/traefik.yaml
     networks:
       - traefik
@@ -26,7 +26,7 @@ secrets:
     file: secrets/gandi_api_key.txt
 
 configs:
-  traefik.v11:
+  traefik.v12:
     file: configs/traefik/traefik.yaml
 
 networks:
@@ -35,5 +35,4 @@ networks:
     name: traefik_services
 
 volumes:
-  acme_certificates:
-    name: traefik_acme_certificates_do_not_destroy
+  acme_certificates: {}
