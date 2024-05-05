@@ -11,6 +11,8 @@ services:
       - postgres_password.v1
     networks:
       - database
+    volumes:
+      - /var/lib/postgresql
 
   keycloak:
     image: registry.aredherring.tech/keycloak:latest
