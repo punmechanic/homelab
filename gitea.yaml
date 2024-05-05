@@ -5,19 +5,22 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
+      - GITEA__server__DOMAIN=gitea.aredherring.tech
+      - GITEA__server__ROOT_URL=https://gitea.aredherring.tech
       - GITEA__database__DB_TYPE=postgres
       - GITEA__database__HOST=postgres:5432
       - GITEA__database__NAME=gitea
       - GITEA__database__USER=gitea
       - GITEA__database__PASSWD__FILE=/run/secrets/gitea_password.v1
+      - GITEA__service__ALLOW_ONLY_EXTERNAL_REGISTRATION=true
+      - GITEA__openid__ENABLE_OPENID_SIGNIN=true
+      - GITEA__openid__ENABLE_OPENID_SIGNUP=true
+      - GITEA__openid__WHITELISTED_URIS=https://sso.aredherring.tech/
     networks:
       - gitea
       - traefik
     volumes:
-      - /var/lib/gitea
-      - /data/git/lfs
-      - /data/git/repositories
-      - /data/git/log
+      - /data
     secrets:
       - gitea_password.v1
     deploy:
@@ -54,4 +57,3 @@ networks:
   traefik:
     name: traefik_services
     external: true
-

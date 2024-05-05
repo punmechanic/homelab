@@ -120,3 +120,34 @@ Then, apply the tofu files:
 Deploy the stack:
 
     docker stack up --compose-file gitea.yaml gitea
+
+Visit https://gitea.aredherring.tech and follow the installation Wizard. The
+default settings will be correct, however, you must set up an administrator
+account.
+
+- Scroll to Optional Settings
+- Click Administrator Account Settings
+- Fill out as you prefer, but save the username and password in your password
+  manager. You cannot name the account `admin`.
+- You will now be logged in as the administrator account.
+
+Now, we will add Keycloak as an identity provider.
+
+- Click the avatar in the top right, then click Site Administration.
+- Click Identity & Access, and then click Authentication Sources.
+
+Enter the form as follows:
+
+- Authentication Type: OAuth2
+- Authentication Name: keycloak
+- OAuth2 Provider: OpenID Connect
+- Client ID: gitea
+- Client Secret: `cd terraform/keycloak && tofu output -raw gitea_client_secret`
+- OpenID Connect Auto Discovery URL: https://sso.aredherring.tech/realms/homelab
+
+You should log in with your Keycloak account, which was created when Keycloak
+was set up. You may need to log into Keycloak using the administrator account to
+set up a password as there is no mailer set up yet.
+
+Sometimes Gitea can be get stuck in a redirect loop after installation is done.
+This can be resolved doing a hard-refresh.
