@@ -50,7 +50,34 @@ The following network must be created for Traefik to be able to reach all
 services. It must be created externally to Docker to ensure all services can
 "see" it.
 
-    docker network create --driver overlay --scope=swarm --attachable traefik_services
+    docker network create \
+        --driver overlay \
+        --scope swarm \
+        --attachable \
+        --subnet 10.1.0.0/16 \
+        traefik_services
+
+A few services use an internal network named Openbao to enable them to
+communicate through the Docker networking stack rather than going to the
+internal network to reach Openbao.
+
+    docker network create \
+        --driver overlay \
+        --scope swarm \
+        --attachable \
+        --subnet 10.0.5.0/24 \
+        openbao
+
+These networks have their own _subnets_. Containers connected to the networks
+will be assigned an IP address from that subnet while on that network, and
+traffic coming from them will be from an IP in those subnets. This allows us to
+create rules that restrict access to services to our internal network.
+
+- Openbao can only be accessed by internal services from 10.0.5.0/24 (253 usable
+  addresses).
+
+- Traefik will always communicate with its containers over 10.1.0.0/16 (65k
+  usable addresses).
 
 ## Secrets
 
@@ -190,3 +217,5 @@ code for it but it must be compiled first:
 
     cd /usr/share/doc/git/contrib/credential/libsecret
     sudo make
+
+## Openbao

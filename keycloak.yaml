@@ -54,3 +54,6 @@ networks:
   traefik:
     name: traefik_services
     external: true
+  openbao:
+    external: true
+    name: openbao
