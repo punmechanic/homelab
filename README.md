@@ -1,6 +1,11 @@
 # Initial Setup
 
-Follow these steps in order to deploy from scratch
+Follow these steps in order to deploy from scratch.
+
+This uses _Docker Swarm_. Create a Swarm before executing any of these
+instructions.
+
+    docker swarm init
 
 ## DNS
 
@@ -154,7 +159,7 @@ set up a password as there is no mailer set up yet.
 Sometimes Gitea can be get stuck in a redirect loop after installation is done.
 This can be resolved doing a hard-refresh.
 
-### Gitea CI
+#### CI
 
 To set up CI, we need to add runners. Runners are created when the stack is
 deployed, but the stack must be re-deployed to update the registration token on
@@ -168,3 +173,20 @@ Log into the administration panel on Gitea.
 - Copy the Registration Token and add it to `secrets/gitea/ci_runner_token.txt`.
 - Open `gitea.yaml`, and increment the number on `gitea_password.v1`.
 - Redeploy the stack: `docker stack up --compose-file gitea.yaml gitea`
+
+#### Pushing and pulling
+
+This Gitea instance is not currently configured to use SSH passthrough, so you
+can only push or pull using HTTPS.
+
+You should configure your git locally to store credentials safely so you don't
+have to repeatedly enter your username and password:
+
+    git config --global credential.helper \
+        /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
+
+You may need to install libsecret for this. Git 2.34.1 comes with the source
+code for it but it must be compiled first:
+
+    cd /usr/share/doc/git/contrib/credential/libsecret
+    sudo make
