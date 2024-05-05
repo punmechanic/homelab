@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+  server:
+    image: gitea/gitea:1.21.11
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=postgres:5432
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
+      - GITEA__database__PASSWD__FILE=/run/secrets/gitea_password.v1
+    networks:
+      - gitea
+    volumes:
+      - /var/lib/gitea
+      - /data/git/lfs
+      - /data/git/repositories
+      - /data/git/log
+    ports:
+      - "3000:3000"
+      - "222:22"
+    secrets:
+      - gitea_password.v1
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: gitea
+      POSTGRES_USER: gitea
+      POSTGRES_PASSWORD_FILE: /run/secrets/gitea_password.v1
+    secrets:
+      - gitea_password.v1
+    volumes:
+      - /var/lib/postgresql
+    networks:
+      - gitea
+
+secrets:
+  gitea_password.v1:
+    file: ./secrets/gitea_postgres_password.txt
+
+networks:
+  gitea: {}

@@ -38,15 +38,3 @@ export KEYCLOAK_URL=http://localhost:8080
 ```
 
 - Execute `tofu apply` inside the terraform folder.
-
-## Gitlab
-
-To get the root password, enter the following in your console after Gitlab has
-booted.
-
-    TASK_ID=$(docker service ps gitlab_gitlab -f 'desired-state=running' --format '{{.ID}}')
-    CONTAINER_ID=$(docker inspect $TASK_ID | jq '.[].Status.ContainerStatus.ContainerID' -r)
-    docker exec -it "$CONTAINER_ID" grep 'Password:'  /etc/gitlab/initial_root_password
-
-Visit http://localhost:8081 in your browser. Login to the root account with the
-username `root` and the initial password.
