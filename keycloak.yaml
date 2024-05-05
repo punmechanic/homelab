@@ -24,6 +24,8 @@ services:
       KC_DB_PASSWORD_FILE: /run/secrets/postgres_password.v1
       KC_HEALTH_ENABLED: "true"
       KC_METRICS_ENABLED: "true"
+      KC_HOSTNAME: sso.aredherring.tech
+      KC_PROXY_HEADERS: xforwarded
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD_FILE: /run/secrets/admin_password.v1
     networks:

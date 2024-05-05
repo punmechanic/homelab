@@ -1,4 +1,5 @@
 */*.terraform
+**/*.terraform/
 .env
 /letsencrypt
 secrets/*.secret
