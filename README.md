@@ -55,6 +55,8 @@ Generate new secrets:
     ./generate-secret.sh > secrets/keycloak_pg_password.txt
     ./generate-secret.sh > secrets/terraform_postgres_backend_password.txt
     ./generate-secret.sh > secrets/gitea_postgres_password.txt
+    mkdir -p secrets/gitea
+    touch secrets/gitea/ci_runner_token.txt
 
 ## Traefik
 
@@ -151,3 +153,18 @@ set up a password as there is no mailer set up yet.
 
 Sometimes Gitea can be get stuck in a redirect loop after installation is done.
 This can be resolved doing a hard-refresh.
+
+### Gitea CI
+
+To set up CI, we need to add runners. Runners are created when the stack is
+deployed, but the stack must be re-deployed to update the registration token on
+them.
+
+Log into the administration panel on Gitea.
+
+- Click Actions.
+- Click Runners.
+- Click Create new Runner.
+- Copy the Registration Token and add it to `secrets/gitea/ci_runner_token.txt`.
+- Open `gitea.yaml`, and increment the number on `gitea_password.v1`.
+- Redeploy the stack: `docker stack up --compose-file gitea.yaml gitea`
