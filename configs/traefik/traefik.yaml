@@ -1,19 +1,23 @@
-api:
-  insecure: true
-
 providers:
   swarm:
     exposedByDefault: false
     network: traefik_services
 
 entryPoints:
-  web:
-    address: ":80"
   websecure:
     address: ":443"
+    asDefault: true
+  # This is enabled for Gitea
   ssh:
     address: ":22"
 
 log:
-  level: DEBUG
+  level: INFO
 
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: dan@aredherring.tech
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      dnsChallenge:
+        provider: gandiv5

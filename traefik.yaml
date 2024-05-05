@@ -4,35 +4,29 @@ version: "3.8"
 services:
   traefik:
     image: traefik:v3.0.0
+    environment:
+      # This is required to verify DNS records with Gandi.
+      GANDIV5_PERSONAL_ACCESS_TOKEN_FILE: /run/secrets/gandi-api-key
     ports:
-      - "80:80"
       - "443:443"
-      # The Web UI (enabled by --api.insecure=true)
-      - "8081:8080"
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/traefik/acme
     configs:
-      - source: traefik.v5
+      - source: traefik.v9
         target: /etc/traefik/traefik.yaml
     networks:
       - traefik
+    secrets:
+      - gandi-api-key
 
-  whoami:
-    # A container that exposes an API to show its IP address
-    image: traefik/whoami
-    deploy:
-      labels:
-        - traefik.enable=true
-        - traefik.http.routers.whoami.entrypoints=web
-        - traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)
-        - traefik.http.routers.whoami.service=whoami
-        - traefik.http.services.whoami.loadbalancer.server.port=80
-    networks:
-      - traefik
+secrets:
+  gandi-api-key:
+    file: secrets/gandi_api_key.txt
 
 configs:
-  traefik.v5:
+  traefik.v9:
     file: configs/traefik/traefik.yaml
 
 networks:

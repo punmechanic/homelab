@@ -37,8 +37,8 @@ services:
       labels:
         - traefik.enable=true
         - traefik.http.routers.sso.rule=Host(`sso.aredherring.tech`)
-        - traefik.http.routers.sso.entrypoints=web
         - traefik.http.routers.sso.service=sso
+        - traefik.http.routers.sso.tls.certresolver=letsencrypt
         - traefik.http.services.sso.loadbalancer.server.port=8080
 
 secrets:
