@@ -19,9 +19,22 @@ services:
       - /data/git/log
     ports:
       - "3000:3000"
-      - "222:22"
+      - "22:22"
     secrets:
       - gitea_password.v1
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.gitea.rule=Host(`gitea.aredherring.tech`)"
+        - "traefik.http.services.gitea.loadbalancer.server.port=3000"
+        - "traefik.http.routers.gitea.entrypoints=web"
+        - "traefik.http.routers.gitea.tls=true"
+        - "traefik.http.routers.gitea.tls.certresolver=myresolver"
+        - "traefik.http.routers.gitea.middlewares=auth"
+        - "traefik.tcp.routers.gitea-ssh.rule=HostSNI(`*`)"
+        - "traefik.tcp.routers.gitea-ssh.entrypoints=ssh"
+        - "traefik.tcp.routers.gitea-ssh.service=gitea-ssh"
+        - "traefik.tcp.services.gitea-ssh.loadbalancer.server.port=22"
 
   postgres:
     image: postgres:13

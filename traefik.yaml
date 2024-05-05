@@ -1,0 +1,21 @@
+# Traefik is used to reverse-proxy to our services.
+# This is necessary because services really need to be able to reach Keycloak using a domain name, rather than using `localhost`.
+version: "3.8"
+services:
+  traefik:
+    image: traefik:v3.0.0
+    ports:
+      - "80:80"
+      - "443:443"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8081:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+    configs:
+      - source: traefik.v1
+        target: /etc/traefik/traefik.yaml
+
+configs:
+  traefik.v1:
+    file: configs/traefik/traefik.yaml
