@@ -12,9 +12,9 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/traefik/acme
+      - acme_certificates:/etc/traefik/acme
     configs:
-      - source: traefik.v9
+      - source: traefik.v11
         target: /etc/traefik/traefik.yaml
     networks:
       - traefik
@@ -26,10 +26,14 @@ secrets:
     file: secrets/gandi_api_key.txt
 
 configs:
-  traefik.v9:
+  traefik.v11:
     file: configs/traefik/traefik.yaml
 
 networks:
   traefik:
     external: true
     name: traefik_services
+
+volumes:
+  acme_certificates:
+    name: traefik_acme_certificates_do_not_destroy
