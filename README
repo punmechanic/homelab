@@ -51,7 +51,7 @@ manage DNS records, and store it in `secrets/gandi_api_key.txt.`
   `terraform/.env` with the following values, replacing the client secret as
   appropriate:
 
-### DNS, Keycloak and other Terraform
+### External DNS, Keycloak and other Terraform
 
 ```
 export PGUSER=terraform
@@ -64,3 +64,17 @@ export KEYCLOAK_URL=http://localhost:8080
 ```
 
 - Execute `tofu apply` inside the terraform folder.
+
+External DNS must be applied for Traefik certs to be issued. Yes, this does mean
+that we have a circular reference: DNS changes need to be applied _before_
+services are deployed, but in the same Terraform we have Keycloak configuration
+which can only be applied _after_ services are deployed. This is something that
+should be refactored. Until then, use `-target` to selectively deploy the DNS
+records.
+
+## DNS
+
+DNS records are configured to point to `192.168.0.215` on external DNS on
+aredherring.tech, but we have also configured our internal DNS at http://pi.hole
+to point sso and gitea to the appropriate domains. Make sure to check
+http://pi.hole if making changes to the IP address of the host machine.
