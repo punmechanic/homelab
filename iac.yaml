@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:13
+    # Until this is configured to use Gitlab, this needs to be accessible from the local machine.
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: terraform
+      POSTGRES_USER: terraform
+      POSTGRES_PASSWORD_FILE: /run/secrets/terraform_password.v1
+    secrets:
+      - terraform_password.v1
+
+secrets:
+  terraform_password.v1:
+    file: ./secrets/terraform_postgres_backend_password.txt
