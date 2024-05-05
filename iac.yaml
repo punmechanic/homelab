@@ -11,6 +11,8 @@ services:
       POSTGRES_PASSWORD_FILE: /run/secrets/terraform_password.v1
     secrets:
       - terraform_password.v1
+    volumes:
+      - /var/lib/postgresql
 
 secrets:
   terraform_password.v1:
