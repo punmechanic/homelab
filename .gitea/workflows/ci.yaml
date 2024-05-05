@@ -1,5 +1,8 @@
 name: Homelab Deployment
-on: [workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   Explore-Gitea-Actions:
