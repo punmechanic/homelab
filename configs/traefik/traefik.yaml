@@ -4,3 +4,16 @@ api:
 providers:
   swarm:
     exposedByDefault: false
+    network: traefik_services
+
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+  ssh:
+    address: ":22"
+
+log:
+  level: DEBUG
+

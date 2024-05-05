@@ -26,14 +26,20 @@ services:
       KC_METRICS_ENABLED: "true"
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD_FILE: /run/secrets/admin_password.v1
-    ports:
-      - "8080:8080"
     networks:
       - database
+      - traefik
     secrets:
       - postgres_password.v1
       - admin_password.v1
     command: start-dev
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.sso.rule=Host(`sso.aredherring.tech`)
+        - traefik.http.routers.sso.entrypoints=web
+        - traefik.http.routers.sso.service=sso
+        - traefik.http.services.sso.loadbalancer.server.port=8080
 
 secrets:
   postgres_password.v1:
@@ -43,3 +49,6 @@ secrets:
 
 networks:
   database: {}
+  traefik:
+    name: traefik_services
+    external: true

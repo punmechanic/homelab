@@ -2,6 +2,14 @@
 
 Follow these steps in order to deploy from scratch.
 
+## Network setup
+
+The following network must be created for Traefik to be able to reach all
+services. It must be created externally to Docker to ensure all services can
+"see" it.
+
+    docker network create --driver overlay --scope=swarm --attachable traefik_services
+
 ## Secrets
 
 Generate new secrets:
