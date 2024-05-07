@@ -45,9 +45,9 @@ services:
 
 secrets:
   postgres_password.v1:
-    file: ./secrets/keycloak_pg_password.txt
+    file: ../../secrets/keycloak_pg_password.txt
   admin_password.v1:
-    file: ./secrets/keycloak_admin_password.txt
+    file: ../../secrets/keycloak_admin_password.txt
 
 networks:
   database: {}

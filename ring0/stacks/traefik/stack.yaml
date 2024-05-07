@@ -23,11 +23,11 @@ services:
 
 secrets:
   gandi-api-key:
-    file: secrets/gandi_api_key.txt
+    file: ../../secrets/gandi_api_key.txt
 
 configs:
   traefik.v12:
-    file: configs/traefik/traefik.yaml
+    file: config.yaml
 
 networks:
   traefik:

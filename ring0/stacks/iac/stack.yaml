@@ -19,4 +19,4 @@ volumes:
 
 secrets:
   terraform_password.v1:
-    file: ./secrets/terraform_postgres_backend_password.txt
+    file: ../../secrets/terraform_postgres_backend_password.txt
