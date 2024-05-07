@@ -1,4 +1,10 @@
-# Initial Setup
+# Ring 0
+
+The ring0 services are the core services that must be deployed before anything
+else. These are _not_ intended to be automated deploys, and deploying them
+usually means disaster recovery.
+
+# Deployment instructions
 
 Follow these steps in order to deploy from scratch.
 
@@ -18,13 +24,12 @@ so that we can save Tofu state. To start, create the following secret:
 
 Then, deploy the `iac` (infrastructure as code) stack:
 
-    docker stack up --compose-file iac.yaml iac
+    docker stack up --compose-file stack.yaml iac
 
 Generate a personal access token from https://gandi.net which has permissions to
 manage DNS records, and store it in `secrets/gandi_api_key.txt.`
 
-Create a new file in `terraform/dns` named `.env`. Fill it with the following
-values:
+Create a new file in `tofu/dns` named `.env`. Fill it with the following values:
 
     export PGUSER=terraform
     export PGPASSWORD=$(cat ../../secrets/terraform_postgres_backend_password.txt)
@@ -34,7 +39,7 @@ values:
 
 Run `tofu apply`.
 
-    cd terraform/dns
+    cd tofu/dns
     source .env && tofu apply
 
 ### Internal DNS
@@ -57,9 +62,9 @@ services. It must be created externally to Docker to ensure all services can
         --subnet 10.1.0.0/16 \
         traefik_services
 
-A few services use an internal network named Vault to enable them to
-communicate through the Docker networking stack rather than going to the
-internal network to reach Vault.
+A few services use an internal network named Vault to enable them to communicate
+through the Docker networking stack rather than going to the internal network to
+reach Vault.
 
     docker network create \
         --driver overlay \
@@ -105,7 +110,7 @@ use the staging CA server.
 
 After confirming everything is fine, deploy the Traefik stack:
 
-    docker stack up --compose-file traefik.yaml traefik
+    docker stack up --compose-file stack.yaml traefik
 
 ## Internal services
 
@@ -120,7 +125,7 @@ well-optimized for receiving secrets from Docker. Build that image first.
 
 Deploy the stack:
 
-    docker stack up --compose-file keycloak.yaml keycloak
+    docker stack up --compose-file stack.yaml keycloak
 
 - Visit `https://sso.aredherring.tech` and log into Keycloak using the
   credentials `admin` and the password in `secrets/keycloak_admin_password.txt`
@@ -130,8 +135,8 @@ Deploy the stack:
   ticked.
 - Assign the new client the `create-realm` and `admin` Service account roles.
 - Copy the client secret from the Credentials panel. Create a new `.env` file at
-  `terraform/keycloak/.env` with the following values, replacing the client
-  secret as appropriate.
+  `tofu/keycloak/.env` with the following values, replacing the client secret as
+  appropriate.
 
 ```
 export PGUSER=terraform
@@ -146,14 +151,14 @@ export KEYCLOAK_URL=https://sso.aredherring.tech
 
 Then, apply the tofu files:
 
-    cd terraform/keycloak
+    cd tofu/keycloak
     source .env && tofu apply
 
 ### Gitea
 
 Deploy the stack:
 
-    docker stack up --compose-file gitea.yaml gitea
+    docker stack up --compose-file stack.yaml gitea
 
 Visit https://gitea.aredherring.tech and follow the installation Wizard. The
 default settings will be correct, however, you must set up an administrator
@@ -176,7 +181,7 @@ Enter the form as follows:
 - Authentication Name: keycloak
 - OAuth2 Provider: OpenID Connect
 - Client ID: gitea
-- Client Secret: `cd terraform/keycloak && tofu output -raw gitea_client_secret`
+- Client Secret: `cd tofu/keycloak && tofu output -raw gitea_client_secret`
 - OpenID Connect Auto Discovery URL: https://sso.aredherring.tech/realms/homelab
 
 You should log in with your Keycloak account, which was created when Keycloak
@@ -217,5 +222,3 @@ code for it but it must be compiled first:
 
     cd /usr/share/doc/git/contrib/credential/libsecret
     sudo make
-
-## Vault
