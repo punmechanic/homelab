@@ -12,7 +12,7 @@ services:
     networks:
       - database
     volumes:
-      - /var/lib/postgresql
+      - postgres:/var/lib/postgresql
 
   keycloak:
     image: registry.aredherring.tech/keycloak:latest
@@ -57,3 +57,6 @@ networks:
   vault:
     external: true
     name: vault
+
+volumes:
+  postgres: {}

@@ -62,7 +62,7 @@ services:
     secrets:
       - gitea_password.v1
     volumes:
-      - /var/lib/postgresql
+      - postgres:/var/lib/postgresql
     networks:
       - gitea
 
@@ -78,6 +78,7 @@ secrets:
 
 volumes:
   gitea: {}
+  postgres: {}
 
 networks:
   gitea: {}
