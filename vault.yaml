@@ -1,14 +1,14 @@
 version: "3.8"
 services:
-  openbao:
-    image: openbao/openbao:latest
+  vault:
+    image: hashicorp/vault:1.15
     networks:
-      - openbao
-    deploy:
-      replicas: 5
+      - vault
+    cap_add:
+      - IPC_LOCK
 
 networks:
-  openbao:
+  vault:
     # This is an external network that can be used to allow connections to Openbao for our internal services to go through our private network, rather than needing to go over the internet.
     external: true
-    name: openbao
+    name: vault

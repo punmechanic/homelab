@@ -57,23 +57,23 @@ services. It must be created externally to Docker to ensure all services can
         --subnet 10.1.0.0/16 \
         traefik_services
 
-A few services use an internal network named Openbao to enable them to
+A few services use an internal network named Vault to enable them to
 communicate through the Docker networking stack rather than going to the
-internal network to reach Openbao.
+internal network to reach Vault.
 
     docker network create \
         --driver overlay \
         --scope swarm \
         --attachable \
         --subnet 10.0.5.0/24 \
-        openbao
+        vault
 
 These networks have their own _subnets_. Containers connected to the networks
 will be assigned an IP address from that subnet while on that network, and
 traffic coming from them will be from an IP in those subnets. This allows us to
 create rules that restrict access to services to our internal network.
 
-- Openbao can only be accessed by internal services from 10.0.5.0/24 (253 usable
+- Vault can only be accessed by internal services from 10.0.5.0/24 (253 usable
   addresses).
 
 - Traefik will always communicate with its containers over 10.1.0.0/16 (65k
@@ -218,4 +218,4 @@ code for it but it must be compiled first:
     cd /usr/share/doc/git/contrib/credential/libsecret
     sudo make
 
-## Openbao
+## Vault
