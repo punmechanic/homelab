@@ -2,6 +2,8 @@ version: "3.8"
 services:
   grafana:
     image: grafana/grafana-oss
+    networks:
+      - traefik
     deploy:
       labels:
         - traefik.enable=true
@@ -9,3 +11,8 @@ services:
         - traefik.http.routers.grafana.service=grafana
         - traefik.http.routers.grafana.tls.certresolver=letsencrypt
         - traefik.http.services.grafana.loadbalancer.server.port=3000
+
+networks:
+  traefik:
+    name: traefik_services
+    external: true
