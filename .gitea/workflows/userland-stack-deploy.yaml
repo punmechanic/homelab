@@ -13,7 +13,7 @@ jobs:
       - name: Deploy all stacks
         run: |
           for STACK_FILE in $(find userland/stacks -type f -name stack.yaml); do
-            DIR=$(basename $STACK_FILE)
+            DIR=$(basename $STACK_FILE .yaml)
             STACK_NAME=$(basename $DIR)
             docker stack deploy "$STACK_NAME" --compose-file="$STACK_FILE"
           done
