@@ -4,11 +4,36 @@ services:
     image: hashicorp/vault:1.15
     networks:
       - vault
+      - vault_config
+      - traefik
     cap_add:
       - IPC_LOCK
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.vault.rule=Host(`vault.aredherring.tech`)"
+        - "traefik.http.routers.vault.entrypoints=websecure"
+        - "traefik.http.routers.vault.tls=true"
+        - "traefik.http.routers.vault.tls.certresolver=letsencrypt"
+        - "traefik.http.services.vault.loadbalancer.server.port=8200"
+
+  vault-config:
+    image: registry.aredherring.tech/tofu-runner:latest
+    environment:
+      VAULT_ADDR: http://vault:8200
+    volumes:
+      - ./tofu:/sources
+    networks:
+      - vault_config
 
 networks:
+  # Vault Config is a network that is used to provision core configuration for Vault.
+  vault_config: {}
+
   vault:
     # This is an external network that can be used to allow connections to Openbao for our internal services to go through our private network, rather than needing to go over the internet.
     external: true
     name: vault
+  traefik:
+    external: true
+    name: traefik_services

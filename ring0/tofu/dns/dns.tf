@@ -23,3 +23,12 @@ resource "gandi_livedns_record" "grafana" {
   values = ["192.168.0.215"]
   ttl    = 36000
 }
+
+
+resource "gandi_livedns_record" "vault" {
+  zone   = "aredherring.tech"
+  name   = "vault"
+  type   = "A"
+  values = ["192.168.0.215"]
+  ttl    = 36000
+}
