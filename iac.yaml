@@ -12,7 +12,10 @@ services:
     secrets:
       - terraform_password.v1
     volumes:
-      - /var/lib/postgresql
+      - postgres:/var/lib/postgresql
+
+volume:
+  postgres: {}
 
 secrets:
   terraform_password.v1:
