@@ -1,0 +1,19 @@
+name: userland stack deployment
+on:
+  push:
+    branches:
+      - userland-ci
+
+jobs:
+  Userland-Stack-Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Deploy all stacks
+        run: |
+          for STACK_FILE in $(find userland/stacks -type f -name stack.yaml); do
+            DIR=$(basename $STACK_FILE)
+            STACK_NAME=$(basename $DIR)
+            docker stack deploy "$STACK_NAME" --compose-file="$STACK_FILE"
+          done
