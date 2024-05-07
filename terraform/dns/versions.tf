@@ -1,5 +1,7 @@
 terraform {
-  backend "pg" {}
+  backend "pg" {
+    schema_name = "dns"
+  }
 
   required_providers {
     gandi = {

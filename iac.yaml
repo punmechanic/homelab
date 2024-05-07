@@ -14,7 +14,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql
 
-volume:
+volumes:
   postgres: {}
 
 secrets:
