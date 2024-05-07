@@ -19,6 +19,7 @@ Deploy the stack:
 
     docker stack up vault --compose-file stack.yaml
 
-Wait a bit for Traefik to pick up the service, then apply the Tofu
+After deploying the stack, you will need to get the root token for Vault so that
+Vault can be configured to issue tokens to OIDC clients.
 
-    tofu init && tofu apply
+To do this, we will need to manually inspect the logs of Vault.

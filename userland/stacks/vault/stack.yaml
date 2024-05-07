@@ -1,13 +1,15 @@
 version: "3.8"
 services:
   vault:
-    image: hashicorp/vault:1.15
+    image: registry.aredherring.tech/vault:latest
     networks:
       - vault
-      - vault_config
       - traefik
+      - stats
     cap_add:
       - IPC_LOCK
+    environment:
+      VAULT_API_ADDR: https://vault.aredherring.tech:8200
     deploy:
       labels:
         - "traefik.enable=true"
@@ -16,20 +18,27 @@ services:
         - "traefik.http.routers.vault.tls=true"
         - "traefik.http.routers.vault.tls.certresolver=letsencrypt"
         - "traefik.http.services.vault.loadbalancer.server.port=8200"
-
-  vault-config:
-    image: registry.aredherring.tech/tofu-runner:latest
-    environment:
-      VAULT_ADDR: http://vault:8200
+    configs:
+      - source: vault_config.v8
+        target: /vault/config/server.hcl
     volumes:
-      - ./tofu:/sources
+      - vault_data:/var/raft/
+    # This command is here to disable dev mode.
+    command: server -config=/vault/config/server.hcl
+  statsd:
+    image: statsd/statsd:latest
     networks:
-      - vault_config
+      - stats
+
+volumes:
+  vault_data: {}
+
+configs:
+  vault_config.v8:
+    file: ./server.hcl
 
 networks:
-  # Vault Config is a network that is used to provision core configuration for Vault.
-  vault_config: {}
-
+  stats: {}
   vault:
     # This is an external network that can be used to allow connections to Openbao for our internal services to go through our private network, rather than needing to go over the internet.
     external: true
