@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   server:
-    image: gitea/gitea:1.21.11
+    image: gitea/gitea:1.22-nightly
     environment:
       - USER_UID=1000
       - USER_GID=1000
@@ -41,12 +41,12 @@ services:
       - CONFIG_FILE=/etc/config.yaml
       - GITEA_INSTANCE_URL=https://gitea.aredherring.tech
       - GITEA_TOKEN_FILE=/run/secrets/gitea_token.v1
-      - GITEA_RUNNER_REGISTRATION_TOKEN_FILE=/run/secrets/gitea_runner_token.v1
+      - GITEA_RUNNER_REGISTRATION_TOKEN_FILE=/run/secrets/gitea_runner_token.v2
     configs:
       - source: gitea-runner.v1
         target: /etc/config.yaml
     secrets:
-      - gitea_runner_token.v1
+      - gitea_runner_token.v2
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /data
@@ -73,7 +73,7 @@ configs:
 secrets:
   gitea_password.v1:
     file: ./secrets/gitea_postgres_password.txt
-  gitea_runner_token.v1:
+  gitea_runner_token.v2:
     file: ./secrets/gitea/ci_runner_token.txt
 
 volumes:
