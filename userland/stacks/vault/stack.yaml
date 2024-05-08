@@ -19,7 +19,7 @@ services:
         - "traefik.http.routers.vault.tls.certresolver=letsencrypt"
         - "traefik.http.services.vault.loadbalancer.server.port=8200"
     configs:
-      - source: vault_config.v1
+      - source: vault_config.v2
         target: /vault/config/server.hcl
     volumes:
       - vault_data:/var/raft/
@@ -36,7 +36,7 @@ volumes:
   vault_data: {}
 
 configs:
-  vault_config.v1:
+  vault_config.v2:
     file: ./server.hcl
 
 networks:
@@ -48,7 +48,3 @@ networks:
   traefik:
     external: true
     name: traefik_services
-
-secrets:
-  terraform_password.v1:
-    file: secrets/terraform_postgres_backend_password.txt

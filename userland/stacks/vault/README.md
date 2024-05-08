@@ -34,8 +34,7 @@ Vault.
 
 First, initialize Vault:
 
-    VAULT_CONTAINER_ID=$(docker ps --filter "label=com.docker.swarm.service.name=vault_vault" -q | head -n 1)
-    docker exec -it -e VAULT_ADDR=http://127.0.0.1:8200 "$VAULT_CONTAINER_ID" vault operator init
+    docker run -e VAULT_ADDR=http://vault:8200 --network vault --entrypoint /bin/sh hashicorp/vault operator init
 
 Vault will output 5 unseal keys and a root token. The unseal keys should be
 guarded and probably written down on paper and stored in a safe. Multiple times.
@@ -57,3 +56,19 @@ OIDC for this.
         --network global_terraform \
         --volume $(pwd)/tofu:/sources \
         registry.aredherring.tech/tofu-runner:latest
+
+After you have run this, then run the following code **on your local machine**:
+
+    vault auth token revoke "$VAULT_TOKEN"
+
+If, at some point, you need a root token, you can use the following command to
+generate one - but you must have the unseal keys on hand to do so:
+
+    docker run -e VAULT_ADDR=http://vault:8200 -it --network vault --entrypoint bin/sh hashicorp/vault
+    $ vault operator generate-root -init
+    $ vault operator generate-root
+    $ vault operator generate-root
+    $ vault operator generate-root
+    $ vault operator generate-root -decode=... -otp=...
+
+Follow the instructions on screen to generate the new root.

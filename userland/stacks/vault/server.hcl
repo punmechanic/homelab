@@ -12,7 +12,7 @@ telemetry {
 }
 
 listener "tcp" {
-  address = "127.0.0.1:8200"
+  address = "0.0.0.0:8200"
   # TLS is disabled because we terminate TLS at the load balancer.
   tls_disable = true
 }
