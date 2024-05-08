@@ -19,12 +19,14 @@ services:
         - "traefik.http.routers.vault.tls.certresolver=letsencrypt"
         - "traefik.http.services.vault.loadbalancer.server.port=8200"
     configs:
-      - source: vault_config.v8
+      - source: vault_config.v1
         target: /vault/config/server.hcl
     volumes:
       - vault_data:/var/raft/
-    # This command is here to disable dev mode.
+    # This command and entrypoint are here to disable dev mode.
     command: server -config=/vault/config/server.hcl
+    entrypoint: ["vault"]
+
   statsd:
     image: statsd/statsd:latest
     networks:
@@ -34,15 +36,19 @@ volumes:
   vault_data: {}
 
 configs:
-  vault_config.v8:
+  vault_config.v1:
     file: ./server.hcl
 
 networks:
   stats: {}
   vault:
-    # This is an external network that can be used to allow connections to Openbao for our internal services to go through our private network, rather than needing to go over the internet.
+    # This is an external network that can be used to allow connections to Vault for our internal services to go through our private network, rather than needing to go over the internet.
     external: true
     name: vault
   traefik:
     external: true
     name: traefik_services
+
+secrets:
+  terraform_password.v1:
+    file: secrets/terraform_postgres_backend_password.txt

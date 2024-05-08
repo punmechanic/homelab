@@ -5,6 +5,8 @@ services:
     # Until this is configured to use Gitlab, this needs to be accessible from the local machine.
     ports:
       - "5432:5432"
+    networks:
+      - global_terraform
     environment:
       POSTGRES_DB: terraform
       POSTGRES_USER: terraform
@@ -13,6 +15,12 @@ services:
       - terraform_password.v1
     volumes:
       - postgres:/var/lib/postgresql/data
+
+networks:
+  global_terraform:
+    name: global_terraform
+    attachable: true
+    driver: overlay
 
 volumes:
   postgres: {}

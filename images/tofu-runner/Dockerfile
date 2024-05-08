@@ -6,4 +6,6 @@ RUN adduser -S tofu
 USER tofu
 WORKDIR /home/tofu
 VOLUME /sources
-ENTRYPOINT ["tofu", "-chdir=/sources/", "apply"]
+COPY --chown=tofu init_and_apply.sh ./
+RUN chmod +x ./init_and_apply.sh
+ENTRYPOINT ["./init_and_apply.sh"]
